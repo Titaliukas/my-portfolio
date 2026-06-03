@@ -1,26 +1,85 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+	--background: #ffffff;
+	--foreground: #171717;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--font-sans: var(--font-geist-sans);
+	--font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+	:root {
+		--background: #0a0a0a;
+		--foreground: #ededed;
+	}
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+	background: var(--background);
+	color: var(--foreground);
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.font-xp {
+	font-family: Tahoma, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	line-height: 1;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+.font-xp-title {
+	font-family: Trebuchet, sans-serif;
+	font-size: 13px;
+	font-weight: normal;
+	line-height: 1;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+.taskbar-item {
+	@apply flex h-[26px] w-[168px] items-center rounded px-2 text-xs text-white;
+	background: linear-gradient(to bottom, #5fb5f1 0%, #379fee 16%, #308fe2 100%);
+	box-shadow: inset 0 0 0 1px #0b64b1;
+	text-overflow: ellipsis;
+	transition:
+		width 0.15s,
+		background 0.18s,
+		box-shadow 0.18s,
+		border-color 0.18s;
+}
+
+.taskbar-item:hover {
+	background: linear-gradient(to bottom, #56b6fc 0, #52aeff 50%, #0e81ec);
+}
+
+.taskbar-item-active {
+	background: linear-gradient(to bottom, #1c6dbb 0%, #1c6dbb 27%, #195da1 100%);
+	box-shadow:
+		inset 0 0 0 1px #154a7e,
+		inset 2px 0 1px 0 #154a7e,
+		inset 0 2px 1px 0 #154a7e,
+		inset 0 -2px 0 0 #326ba5,
+		inset -2px 0 0 0 #326ba5;
+}
+
+.taskbar-item-active:hover {
+	background: linear-gradient(to top, #206ebb 0, #1e73b1);
+}
+
+.xp-e {
+	cursor: ew-resize !important;
+}
+.xp-w {
+	cursor: ew-resize !important;
+}
+.xp-n {
+	cursor: ns-resize !important;
+}
+.xp-s {
+	cursor: ns-resize !important;
 }
