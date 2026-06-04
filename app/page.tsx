@@ -14,6 +14,7 @@ export interface WindowState {
 	minimized: boolean;
 	active: boolean;
 	zIndex: number;
+	animationState: 'open' | 'closing' | 'minimizing';
 }
 
 export type WindowsState = Record<WindowId, WindowState>;
@@ -26,12 +27,14 @@ export default function Home() {
 			minimized: false,
 			active: false,
 			zIndex: 20,
+			animationState: 'open',
 		},
 		projects: {
 			open: false,
 			minimized: false,
 			active: false,
 			zIndex: 20,
+			animationState: 'open',
 		},
 	});
 
@@ -67,26 +70,20 @@ export default function Home() {
 	};
 
 	const closeWindow = (id: WindowId) => {
-		setWindows((prev) => ({
-			...prev,
-			[id]: {
-				...prev[id],
-				open: false,
-				minimized: false,
-				active: false,
-			},
-		}));
+		setWindows((prev) => ({ ...prev, [id]: { ...prev[id], animationState: 'closing' } }));
+		setTimeout(() => {
+			setWindows((prev) => ({ ...prev, [id]: { ...prev[id], open: false, active: false, animationState: 'open' } }));
+		}, 250);
 	};
 
 	const minimizeWindow = (id: WindowId) => {
-		setWindows((prev) => ({
-			...prev,
-			[id]: {
-				...prev[id],
-				minimized: true,
-				active: false,
-			},
-		}));
+		setWindows((prev) => ({ ...prev, [id]: { ...prev[id], animationState: 'minimizing' } }));
+		setTimeout(() => {
+			setWindows((prev) => ({
+				...prev,
+				[id]: { ...prev[id], minimized: true, active: false, animationState: 'open' },
+			}));
+		}, 250);
 	};
 
 	const focusWindow = (id: WindowId) => {
@@ -175,11 +172,8 @@ export default function Home() {
 					isActive={windows.resume.active}
 					onFocus={() => focusWindow('resume')}
 					onClose={() => closeWindow('resume')}
-					onMinimize={() => {
-						minimizeWindow('resume');
-						console.log('minimise');
-						console.log(windows.resume.minimized);
-					}}
+					onMinimize={() => minimizeWindow('resume')}
+					animationState={windows.resume.animationState}
 				>
 					<Resume />
 				</Window>
@@ -196,6 +190,7 @@ export default function Home() {
 					onFocus={() => focusWindow('projects')}
 					onClose={() => closeWindow('projects')}
 					onMinimize={() => minimizeWindow('projects')}
+					animationState={windows.projects.animationState}
 				>
 					<Resume />
 				</Window>

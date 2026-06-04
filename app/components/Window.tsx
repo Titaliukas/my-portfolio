@@ -16,6 +16,7 @@ interface WindowProps {
 	onMinimize?: () => void;
 	zIndex: number;
 	isActive: boolean;
+	animationState: 'open' | 'closing' | 'minimizing';
 }
 
 export default function Window({
@@ -30,6 +31,7 @@ export default function Window({
 	onMinimize,
 	zIndex,
 	isActive,
+	animationState,
 }: WindowProps) {
 	const [isDragging, setIsDragging] = useState(false);
 	const [isMaximized, setIsMaximized] = useState(false);
@@ -76,6 +78,9 @@ export default function Window({
 			onMouseDown={() => onFocus?.()}
 			style={{
 				zIndex,
+				opacity: animationState !== 'open' ? 0 : 1,
+				transition: 'opacity 250ms ease',
+				pointerEvents: animationState !== 'open' ? 'none' : 'auto',
 			}}
 		>
 			<div
