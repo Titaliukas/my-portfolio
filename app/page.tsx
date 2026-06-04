@@ -1,3 +1,4 @@
+import Resume from '@/app/components/Resume';
 import Taskbar from '@/app/components/Taskbar';
 import Window from '@/app/components/Window';
 import Image from 'next/image';
@@ -14,7 +15,7 @@ export default function Home() {
 			/>
 			<Taskbar />
 			<Window title='My Resume' defaultX={150} defaultY={80} defaultWidth={700} defaultHeight={500}>
-				<h1>Hello World</h1>
+				<Resume />
 			</Window>
 		</main>
 	);

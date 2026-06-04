@@ -83,3 +83,24 @@ body {
 .xp-s {
 	cursor: ns-resize !important;
 }
+
+.xp-scrollbar::-webkit-scrollbar {
+	width: 16px;
+	height: 16px;
+}
+
+.xp-scrollbar::-webkit-scrollbar-track {
+	background: #ffffff;
+}
+
+.xp-scrollbar::-webkit-scrollbar-thumb {
+	background: #c8d6fb;
+	box-shadow:
+		inset 1px solid #fff,
+		inset -3px 0 #bad1fc,
+		inset 1px 1px #b7caf5;
+}
+
+.xp-scrollbar::-webkit-scrollbar-thumb:hover {
+	background: #d7e1fd;
+}
