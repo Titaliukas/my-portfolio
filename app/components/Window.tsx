@@ -53,7 +53,7 @@ export default function Window({
 					className={`window-titlebar flex h-[30px] items-center justify-between px-1 text-white ${isDragging ? 'cursor-move' : 'cursor-default'}`}
 					style={{
 						background:
-							'linear-gradient(to bottom, #0997ff, #0053ee 8%, #0050ee 40%, #06f 88%, #06f 93%, #005bff 95%, #003dd7 96%, #003dd7);',
+							'linear-gradient(to bottom, #0997ff, #0053ee 8%, #0050ee 40%, #06f 88%, #06f 93%, #005bff 95%, #003dd7 96%, #003dd7)',
 					}}
 				>
 					<div className='font-xp-title flex items-center gap-2'>
@@ -62,15 +62,15 @@ export default function Window({
 					</div>
 
 					<div className='flex gap-[2px]'>
-						<button className='window-button ml-[2px]'>
+						<button className='window-button ml-[2px] hover:brightness-110'>
 							<Image src='/minimize.svg' alt='Close' width={21} height={21} draggable={false} />
 						</button>
 
-						<button className='window-button ml-[2px]'>
+						<button className='window-button ml-[2px] hover:brightness-110'>
 							<Image src='/maximise.svg' alt='Close' width={21} height={21} draggable={false} />
 						</button>
 
-						<button onClick={onClose} className='window-button ml-[2px]'>
+						<button onClick={onClose} className='window-button ml-[2px] hover:brightness-110'>
 							<Image src='/close.svg' alt='Close' width={21} height={21} draggable={false} />
 						</button>
 					</div>

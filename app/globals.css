@@ -41,6 +41,14 @@ body {
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
 }
 
+.font-xp-icon {
+	font-family: Tahoma, sans-serif;
+	font-size: 15px;
+	font-weight: normal;
+	line-height: 1;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+}
+
 .taskbar-item {
 	@apply flex h-[26px] w-[168px] items-center rounded px-2 text-xs text-white;
 	background: linear-gradient(to bottom, #5fb5f1 0%, #379fee 16%, #308fe2 100%);
