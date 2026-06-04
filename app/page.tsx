@@ -10,6 +10,7 @@ import { useState } from 'react';
 export default function Home() {
 	const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
 	const [resumeOpen, setResumeOpen] = useState(false);
+	const [resumeMinimized, setResumeMinimized] = useState(false);
 
 	return (
 		<main className='relative h-screen w-screen overflow-hidden' onClick={() => setSelectedIcon(null)}>
@@ -26,7 +27,10 @@ export default function Home() {
 					icon='/folder.png'
 					selected={selectedIcon === 'projects'}
 					onSelect={() => setSelectedIcon('projects')}
-					onOpen={() => setResumeOpen(true)}
+					onOpen={() => {
+						setResumeOpen(true);
+						if (resumeMinimized) setResumeMinimized(false);
+					}}
 				/>
 
 				<DesktopIcon
@@ -34,11 +38,14 @@ export default function Home() {
 					icon='/resume.webp'
 					selected={selectedIcon === 'resume'}
 					onSelect={() => setSelectedIcon('resume')}
-					onOpen={() => setResumeOpen(true)}
+					onOpen={() => {
+						setResumeOpen(true);
+						if (resumeMinimized) setResumeMinimized(false);
+					}}
 				/>
 			</div>
 			<Taskbar />
-			{resumeOpen && (
+			{resumeOpen && !resumeMinimized && (
 				<Window
 					title='My Resume'
 					defaultX={150}
@@ -46,6 +53,7 @@ export default function Home() {
 					defaultWidth={700}
 					defaultHeight={850}
 					onClose={() => setResumeOpen(false)}
+					onMinimize={() => setResumeMinimized(true)}
 				>
 					<Resume />
 				</Window>

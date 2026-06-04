@@ -12,6 +12,7 @@ interface WindowProps {
 	defaultX?: number;
 	defaultY?: number;
 	onClose?: () => void;
+	onMinimize?: () => void;
 }
 
 export default function Window({
@@ -22,8 +23,10 @@ export default function Window({
 	defaultX = 100,
 	defaultY = 100,
 	onClose,
+	onMinimize,
 }: WindowProps) {
 	const [isDragging, setIsDragging] = useState(false);
+	const [isMaximized, setIsMaximized] = useState(false);
 
 	return (
 		<Rnd
@@ -39,13 +42,31 @@ export default function Window({
 			minHeight={200}
 			dragHandleClassName='window-titlebar'
 			cancel='.window-button'
-			className='overflow-hidden rounded-md'
+			className='z-20 overflow-hidden rounded-md'
 			resizeHandleClasses={{
 				right: 'xp-e',
 				left: 'xp-w',
 				top: 'xp-n',
 				bottom: 'xp-s',
 			}}
+			size={
+				isMaximized
+					? {
+							width: window.innerWidth,
+							height: window.innerHeight - 30,
+						}
+					: undefined
+			}
+			position={
+				isMaximized
+					? {
+							x: 0,
+							y: 0,
+						}
+					: undefined
+			}
+			disableDragging={isMaximized}
+			enableResizing={!isMaximized}
 		>
 			<div className='flex h-full flex-col border-[#284ffd] border-2 border-t bg-[#ece9d8] shadow-lg'>
 				{/* Title Bar */}
@@ -62,12 +83,21 @@ export default function Window({
 					</div>
 
 					<div className='flex gap-[2px]'>
-						<button className='window-button ml-[2px] hover:brightness-110'>
+						<button className='window-button ml-[2px] hover:brightness-110' onClick={onMinimize}>
 							<Image src='/minimize.svg' alt='Close' width={21} height={21} draggable={false} />
 						</button>
 
-						<button className='window-button ml-[2px] hover:brightness-110'>
-							<Image src='/maximise.svg' alt='Close' width={21} height={21} draggable={false} />
+						<button
+							className='window-button ml-[2px] hover:brightness-110'
+							onClick={() => {
+								setIsMaximized(!isMaximized);
+							}}
+						>
+							{!isMaximized ? (
+								<Image src='/maximise.svg' alt='Close' width={21} height={21} draggable={false} />
+							) : (
+								<Image src='/restore.svg' alt='Close' width={21} height={21} draggable={false} />
+							)}
 						</button>
 
 						<button onClick={onClose} className='window-button ml-[2px] hover:brightness-110'>
