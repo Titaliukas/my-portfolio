@@ -1,8 +1,14 @@
 import Clock from '@/app/components/Clock';
 import TaskbarItem from '@/app/components/TaskbarItem';
+import { WindowId, WindowsState } from '@/app/page';
 import Image from 'next/image';
 
-export default function Taskbar() {
+interface TaskbarProps {
+	windows: WindowsState;
+	onWindowClick: (id: WindowId) => void;
+}
+
+export default function Taskbar({ windows, onWindowClick }: TaskbarProps) {
 	return (
 		<div className='fixed bottom-0 left-0 z-50 flex h-[30px] w-full items-center bg-[linear-gradient(to_bottom,#306CDF_0%,#478EF0_7%,#2460E3_18%,#1F59E0_52%,#2564E3_88%,#14377D_100%)]'>
 			{/* Start Button */}
@@ -18,8 +24,16 @@ export default function Taskbar() {
 
 			{/* Open Windows */}
 			<div className='flex flex-1 px-1'>
-				<TaskbarItem name={'My Projects'} />
-				<TaskbarItem name={'My Resume'} isActive={true} />
+				{Object.entries(windows)
+					.filter(([_, window]) => window.open)
+					.map(([id, window]) => (
+						<TaskbarItem
+							key={id}
+							name={id === 'resume' ? 'My Resume' : 'My Projects'}
+							isActive={window.active}
+							onClick={() => onWindowClick(id as WindowId)}
+						/>
+					))}
 			</div>
 
 			{/* System Tray */}

@@ -7,10 +7,135 @@ import Window from '@/app/components/Window';
 import Image from 'next/image';
 import { useState } from 'react';
 
+export type WindowId = 'resume' | 'projects';
+
+export interface WindowState {
+	open: boolean;
+	minimized: boolean;
+	active: boolean;
+	zIndex: number;
+}
+
+export type WindowsState = Record<WindowId, WindowState>;
+
 export default function Home() {
 	const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
-	const [resumeOpen, setResumeOpen] = useState(false);
-	const [resumeMinimized, setResumeMinimized] = useState(false);
+	const [windows, setWindows] = useState<WindowsState>({
+		resume: {
+			open: false,
+			minimized: false,
+			active: false,
+			zIndex: 20,
+		},
+		projects: {
+			open: false,
+			minimized: false,
+			active: false,
+			zIndex: 20,
+		},
+	});
+
+	const [topZ, setTopZ] = useState(20);
+
+	const openWindow = (id: WindowId) => {
+		setTopZ((currentZ) => {
+			const newZ = currentZ + 1;
+
+			setWindows((prev) => {
+				const updated = { ...prev };
+
+				(Object.keys(updated) as WindowId[]).forEach((key) => {
+					updated[key] = {
+						...updated[key],
+						active: false,
+					};
+				});
+
+				updated[id] = {
+					...updated[id],
+					open: true,
+					minimized: false,
+					active: true,
+					zIndex: newZ,
+				};
+
+				return updated;
+			});
+
+			return newZ;
+		});
+	};
+
+	const closeWindow = (id: WindowId) => {
+		setWindows((prev) => ({
+			...prev,
+			[id]: {
+				...prev[id],
+				open: false,
+				minimized: false,
+				active: false,
+			},
+		}));
+	};
+
+	const minimizeWindow = (id: WindowId) => {
+		setWindows((prev) => ({
+			...prev,
+			[id]: {
+				...prev[id],
+				minimized: true,
+				active: false,
+			},
+		}));
+	};
+
+	const focusWindow = (id: WindowId) => {
+		setTopZ((currentZ) => {
+			const newZ = currentZ + 1;
+
+			setActiveWindow(id, newZ);
+
+			return newZ;
+		});
+	};
+
+	const setActiveWindow = (id: WindowId, zIndex: number) => {
+		setWindows((prev) => {
+			const updated = { ...prev };
+
+			(Object.keys(updated) as WindowId[]).forEach((key) => {
+				updated[key] = {
+					...updated[key],
+					active: key === id,
+				};
+			});
+
+			updated[id] = {
+				...updated[id],
+				active: true,
+				minimized: false,
+				zIndex,
+			};
+
+			return updated;
+		});
+	};
+
+	const toggleTaskbarWindow = (id: WindowId) => {
+		const window = windows[id];
+
+		if (window.minimized) {
+			focusWindow(id);
+			return;
+		}
+
+		if (window.active) {
+			minimizeWindow(id);
+			return;
+		}
+
+		focusWindow(id);
+	};
 
 	return (
 		<main className='relative h-screen w-screen overflow-hidden' onClick={() => setSelectedIcon(null)}>
@@ -27,10 +152,7 @@ export default function Home() {
 					icon='/folder.png'
 					selected={selectedIcon === 'projects'}
 					onSelect={() => setSelectedIcon('projects')}
-					onOpen={() => {
-						setResumeOpen(true);
-						if (resumeMinimized) setResumeMinimized(false);
-					}}
+					onOpen={() => openWindow('projects')}
 				/>
 
 				<DesktopIcon
@@ -38,22 +160,42 @@ export default function Home() {
 					icon='/resume.webp'
 					selected={selectedIcon === 'resume'}
 					onSelect={() => setSelectedIcon('resume')}
-					onOpen={() => {
-						setResumeOpen(true);
-						if (resumeMinimized) setResumeMinimized(false);
-					}}
+					onOpen={() => openWindow('resume')}
 				/>
 			</div>
-			<Taskbar />
-			{resumeOpen && !resumeMinimized && (
+			<Taskbar windows={windows} onWindowClick={toggleTaskbarWindow} />
+			{windows.resume.open && !windows.resume.minimized && (
 				<Window
 					title='My Resume'
 					defaultX={150}
 					defaultY={40}
 					defaultWidth={700}
 					defaultHeight={850}
-					onClose={() => setResumeOpen(false)}
-					onMinimize={() => setResumeMinimized(true)}
+					zIndex={windows.resume.zIndex}
+					isActive={windows.resume.active}
+					onFocus={() => focusWindow('resume')}
+					onClose={() => closeWindow('resume')}
+					onMinimize={() => {
+						minimizeWindow('resume');
+						console.log('minimise');
+						console.log(windows.resume.minimized);
+					}}
+				>
+					<Resume />
+				</Window>
+			)}
+			{windows.projects.open && !windows.projects.minimized && (
+				<Window
+					title='My Projects'
+					defaultX={250}
+					defaultY={20}
+					defaultWidth={1400}
+					defaultHeight={850}
+					zIndex={windows.projects.zIndex}
+					isActive={windows.projects.active}
+					onFocus={() => focusWindow('projects')}
+					onClose={() => closeWindow('projects')}
+					onMinimize={() => minimizeWindow('projects')}
 				>
 					<Resume />
 				</Window>

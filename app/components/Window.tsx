@@ -11,8 +11,11 @@ interface WindowProps {
 	defaultHeight?: number;
 	defaultX?: number;
 	defaultY?: number;
+	onFocus?: () => void;
 	onClose?: () => void;
 	onMinimize?: () => void;
+	zIndex: number;
+	isActive: boolean;
 }
 
 export default function Window({
@@ -22,8 +25,11 @@ export default function Window({
 	defaultHeight = 400,
 	defaultX = 100,
 	defaultY = 100,
+	onFocus,
 	onClose,
 	onMinimize,
+	zIndex,
+	isActive,
 }: WindowProps) {
 	const [isDragging, setIsDragging] = useState(false);
 	const [isMaximized, setIsMaximized] = useState(false);
@@ -42,7 +48,7 @@ export default function Window({
 			minHeight={200}
 			dragHandleClassName='window-titlebar'
 			cancel='.window-button'
-			className='z-20 overflow-hidden rounded-md'
+			className='overflow-hidden rounded-md'
 			resizeHandleClasses={{
 				right: 'xp-e',
 				left: 'xp-w',
@@ -67,14 +73,23 @@ export default function Window({
 			}
 			disableDragging={isMaximized}
 			enableResizing={!isMaximized}
+			onMouseDown={() => onFocus?.()}
+			style={{
+				zIndex,
+			}}
 		>
-			<div className='flex h-full flex-col border-[#284ffd] border-2 border-t bg-[#ece9d8] shadow-lg'>
+			<div
+				className={`flex h-full flex-col ${isActive ? 'border-[#284ffd]' : 'border-[#3F7FF9]'} border-2 border-t bg-[#ece9d8] shadow-lg`}
+			>
 				{/* Title Bar */}
 				<div
-					className={`window-titlebar flex h-[30px] items-center justify-between px-1 text-white ${isDragging ? 'cursor-move' : 'cursor-default'}`}
+					className={`window-titlebar flex h-[30px] items-center justify-between px-1 ${
+						isActive ? 'text-white' : 'text-[#d8e4f2]'
+					} ${isDragging ? 'cursor-move' : 'cursor-default'}`}
 					style={{
-						background:
-							'linear-gradient(to bottom, #0997ff, #0053ee 8%, #0050ee 40%, #06f 88%, #06f 93%, #005bff 95%, #003dd7 96%, #003dd7)',
+						background: isActive
+							? 'linear-gradient(to bottom, #0997ff, #0053ee 8%, #0050ee 40%, #06f 88%, #06f 93%, #005bff 95%, #003dd7 96%, #003dd7)'
+							: 'linear-gradient(to bottom, #43AAFF, #3F7FF9 8%, #3F7FF9 40%, #3E8EFF 88%, #3E87FF 96%, #003DD7)',
 					}}
 				>
 					<div className='font-xp-title flex items-center gap-2'>
@@ -83,25 +98,46 @@ export default function Window({
 					</div>
 
 					<div className='flex gap-[2px]'>
-						<button className='window-button ml-[2px] hover:brightness-110' onClick={onMinimize}>
-							<Image src='/minimize.svg' alt='Close' width={21} height={21} draggable={false} />
+						<button
+							className='window-button ml-[2px] hover:brightness-110'
+							onMouseDown={(e) => e.stopPropagation()}
+							onClick={onMinimize}
+						>
+							{isActive ? (
+								<Image src='/minimize.svg' alt='Close' width={21} height={21} draggable={false} />
+							) : (
+								<Image src='/minimise_not_active.svg' alt='Close' width={21} height={21} draggable={false} />
+							)}
 						</button>
 
 						<button
 							className='window-button ml-[2px] hover:brightness-110'
+							onMouseDown={(e) => e.stopPropagation()}
 							onClick={() => {
 								setIsMaximized(!isMaximized);
 							}}
 						>
 							{!isMaximized ? (
-								<Image src='/maximise.svg' alt='Close' width={21} height={21} draggable={false} />
+								isActive ? (
+									<Image src='/maximise.svg' alt='Close' width={21} height={21} draggable={false} />
+								) : (
+									<Image src='/maximise_not_active.svg' alt='Close' width={21} height={21} draggable={false} />
+								)
 							) : (
 								<Image src='/restore.svg' alt='Close' width={21} height={21} draggable={false} />
 							)}
 						</button>
 
-						<button onClick={onClose} className='window-button ml-[2px] hover:brightness-110'>
-							<Image src='/close.svg' alt='Close' width={21} height={21} draggable={false} />
+						<button
+							onMouseDown={(e) => e.stopPropagation()}
+							onClick={onClose}
+							className='window-button ml-[2px] hover:brightness-110'
+						>
+							{isActive ? (
+								<Image src='/close.svg' alt='Close' width={21} height={21} draggable={false} />
+							) : (
+								<Image src='/close_not_active.svg' alt='Close' width={21} height={21} draggable={false} />
+							)}
 						</button>
 					</div>
 				</div>
