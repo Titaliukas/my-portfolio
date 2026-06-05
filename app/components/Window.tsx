@@ -155,7 +155,7 @@ export default function Window({
 				{menuBar && <div className='border-b border-[#E4E4E4]'>{menuBar}</div>}
 
 				{/* Tool Bar */}
-				{toolBar && <div className='border-b border-[#E4E4E4]'>{toolBar}</div>}
+				{toolBar && <div className='border-b border-[#E4E4E4] py-1'>{toolBar}</div>}
 
 				{/* Content */}
 				<div className='flex-1 overflow-auto bg-white'>{children}</div>

@@ -23,6 +23,7 @@ export type WindowsState = Record<WindowId, WindowState>;
 
 export default function Home() {
 	const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
+	const [resumeZoomed, setResumeZoomed] = useState(true);
 	const [windows, setWindows] = useState<WindowsState>({
 		resume: {
 			open: false,
@@ -167,13 +168,7 @@ export default function Home() {
 				<Window
 					title='My Resume'
 					menuBar={<ResumeMenuBar />}
-					toolBar={
-						<ResumeToolBar
-							onZoom={() => {
-								/* trigger zoom in Resume */
-							}}
-						/>
-					}
+					toolBar={<ResumeToolBar zoomed={resumeZoomed} onZoom={() => setResumeZoomed((z) => !z)} />}
 					defaultX={150}
 					defaultY={40}
 					defaultWidth={700}
@@ -185,7 +180,7 @@ export default function Home() {
 					onMinimize={() => minimizeWindow('resume')}
 					animationState={windows.resume.animationState}
 				>
-					<Resume />
+					<Resume zoomed={resumeZoomed} onZoomToggle={() => setResumeZoomed((z) => !z)} />
 				</Window>
 			)}
 			{windows.projects.open && !windows.projects.minimized && (
@@ -202,7 +197,7 @@ export default function Home() {
 					onMinimize={() => minimizeWindow('projects')}
 					animationState={windows.projects.animationState}
 				>
-					<Resume />
+					<Resume zoomed={resumeZoomed} onZoomToggle={() => setResumeZoomed((z) => !z)} />
 				</Window>
 			)}
 		</main>
