@@ -2,6 +2,8 @@
 
 import DesktopIcon from '@/app/components/DekstopIcon';
 import Resume from '@/app/components/Resume';
+import ResumeMenuBar from '@/app/components/ResumeMenuBar';
+import ResumeToolBar from '@/app/components/ResumeToolBar';
 import Taskbar from '@/app/components/Taskbar';
 import Window from '@/app/components/Window';
 import Image from 'next/image';
@@ -164,6 +166,14 @@ export default function Home() {
 			{windows.resume.open && !windows.resume.minimized && (
 				<Window
 					title='My Resume'
+					menuBar={<ResumeMenuBar />}
+					toolBar={
+						<ResumeToolBar
+							onZoom={() => {
+								/* trigger zoom in Resume */
+							}}
+						/>
+					}
 					defaultX={150}
 					defaultY={40}
 					defaultWidth={700}

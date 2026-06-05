@@ -17,6 +17,8 @@ interface WindowProps {
 	zIndex: number;
 	isActive: boolean;
 	animationState: 'open' | 'closing' | 'minimizing';
+	menuBar?: ReactNode;
+	toolBar?: ReactNode;
 }
 
 export default function Window({
@@ -32,6 +34,8 @@ export default function Window({
 	zIndex,
 	isActive,
 	animationState,
+	menuBar,
+	toolBar,
 }: WindowProps) {
 	const [isDragging, setIsDragging] = useState(false);
 	const [isMaximized, setIsMaximized] = useState(false);
@@ -146,6 +150,12 @@ export default function Window({
 						</button>
 					</div>
 				</div>
+
+				{/* Menu Bar */}
+				{menuBar && <div className='border-b border-[#E4E4E4]'>{menuBar}</div>}
+
+				{/* Tool Bar */}
+				{toolBar && <div className='border-b border-[#E4E4E4]'>{toolBar}</div>}
 
 				{/* Content */}
 				<div className='flex-1 overflow-auto bg-white'>{children}</div>
