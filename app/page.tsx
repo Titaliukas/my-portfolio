@@ -24,6 +24,7 @@ export type WindowsState = Record<WindowId, WindowState>;
 export default function Home() {
 	const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
 	const [resumeZoomed, setResumeZoomed] = useState(true);
+	const [resumeMaximized, setResumeMaximized] = useState(false);
 	const [windows, setWindows] = useState<WindowsState>({
 		resume: {
 			open: false,
@@ -167,7 +168,19 @@ export default function Home() {
 			{windows.resume.open && !windows.resume.minimized && (
 				<Window
 					title='My Resume'
-					menuBar={<ResumeMenuBar />}
+					menuBar={
+						<ResumeMenuBar
+							onSave={() => {
+								const a = document.createElement('a');
+								a.href = '/Titas_Rimkevicius_CV.pdf';
+								a.download = 'Titas_Rimkevicius_CV.pdf';
+								a.click();
+							}}
+							onExit={() => closeWindow('resume')}
+							onMinimize={() => minimizeWindow('resume')}
+							onMaximize={() => setResumeMaximized((m) => !m)}
+						/>
+					}
 					toolBar={<ResumeToolBar zoomed={resumeZoomed} onZoom={() => setResumeZoomed((z) => !z)} />}
 					defaultX={150}
 					defaultY={40}
@@ -178,6 +191,8 @@ export default function Home() {
 					onFocus={() => focusWindow('resume')}
 					onClose={() => closeWindow('resume')}
 					onMinimize={() => minimizeWindow('resume')}
+					isMaximized={resumeMaximized}
+					onMaximize={() => setResumeMaximized((m) => !m)}
 					animationState={windows.resume.animationState}
 				>
 					<Resume zoomed={resumeZoomed} onZoomToggle={() => setResumeZoomed((z) => !z)} />

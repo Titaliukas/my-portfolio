@@ -19,6 +19,8 @@ interface WindowProps {
 	animationState: 'open' | 'closing' | 'minimizing';
 	menuBar?: ReactNode;
 	toolBar?: ReactNode;
+	isMaximized: boolean;
+	onMaximize?: () => void;
 }
 
 export default function Window({
@@ -36,9 +38,10 @@ export default function Window({
 	animationState,
 	menuBar,
 	toolBar,
+	isMaximized,
+	onMaximize,
 }: WindowProps) {
 	const [isDragging, setIsDragging] = useState(false);
-	const [isMaximized, setIsMaximized] = useState(false);
 
 	return (
 		<Rnd
@@ -123,7 +126,7 @@ export default function Window({
 							className='window-button ml-[2px] hover:brightness-110'
 							onMouseDown={(e) => e.stopPropagation()}
 							onClick={() => {
-								setIsMaximized(!isMaximized);
+								onMaximize?.();
 							}}
 						>
 							{!isMaximized ? (
