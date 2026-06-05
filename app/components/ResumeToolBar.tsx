@@ -1,6 +1,12 @@
 import Image from 'next/image';
 
 export default function ResumeToolBar({ onZoom, zoomed }: { onZoom?: () => void; zoomed?: boolean }) {
+	const handleSave = () => {
+		const a = document.createElement('a');
+		a.href = '/Titas_Rimkevicius_CV.pdf';
+		a.download = 'Titas_Rimkevicius_CV.pdf';
+		a.click();
+	};
 	return (
 		<div className='flex h-[36px] items-center gap-1 bg-[#EDEDED] px-2 py-4'>
 			<button
@@ -25,6 +31,7 @@ export default function ResumeToolBar({ onZoom, zoomed }: { onZoom?: () => void;
 				Zoom
 			</button>
 			<button
+				onClick={handleSave}
 				className={`flex text-black items-center gap-1 rounded px-2 py-1 text-[12px] border border-transparent hover:border hover:border-[#b0b0b0] active:bg-[#dadada]`}
 				style={{ boxShadow: undefined }}
 				onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 1px 1px rgba(0,0,0,.1)')}
