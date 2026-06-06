@@ -19,6 +19,7 @@ interface WindowProps {
 	animationState: 'open' | 'closing' | 'minimizing';
 	menuBar?: ReactNode;
 	toolBar?: ReactNode;
+	addressBar?: ReactNode;
 	isMaximized: boolean;
 	onMaximize?: () => void;
 }
@@ -38,6 +39,7 @@ export default function Window({
 	animationState,
 	menuBar,
 	toolBar,
+	addressBar,
 	isMaximized,
 	onMaximize,
 }: WindowProps) {
@@ -160,8 +162,10 @@ export default function Window({
 				{/* Tool Bar */}
 				{toolBar && <div className='border-b border-[#E4E4E4] py-1'>{toolBar}</div>}
 
+				{addressBar && <div className='border-b border-[#E4E4E4]'>{addressBar}</div>}
+
 				{/* Content */}
-				<div className='flex-1 overflow-auto bg-white'>{children}</div>
+				<div className='flex-1 overflow-hidden bg-white'>{children}</div>
 			</div>
 		</Rnd>
 	);

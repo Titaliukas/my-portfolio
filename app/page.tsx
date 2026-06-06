@@ -1,11 +1,16 @@
 'use client';
 
+import AddressBar from '@/app/components/AddressBar';
 import DesktopIcon from '@/app/components/DekstopIcon';
+import ProjectsExplorer from '@/app/components/projects/ProjectsExplorer';
+import ProjectsMenuBar from '@/app/components/ProjectsMenuBar';
+import ProjectsToolBar from '@/app/components/ProjectsToolBar';
 import Resume from '@/app/components/Resume';
 import ResumeMenuBar from '@/app/components/ResumeMenuBar';
 import ResumeToolBar from '@/app/components/ResumeToolBar';
 import Taskbar from '@/app/components/Taskbar';
 import Window from '@/app/components/Window';
+import { Project } from '@/app/types/projects';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -25,6 +30,8 @@ export default function Home() {
 	const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
 	const [resumeZoomed, setResumeZoomed] = useState(true);
 	const [resumeMaximized, setResumeMaximized] = useState(false);
+	const [projectsMaximized, setProjectsMaximized] = useState(false);
+	const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 	const [windows, setWindows] = useState<WindowsState>({
 		resume: {
 			open: false,
@@ -201,6 +208,15 @@ export default function Home() {
 			{windows.projects.open && !windows.projects.minimized && (
 				<Window
 					title='My Projects'
+					menuBar={
+						<ProjectsMenuBar
+							onExit={() => closeWindow('projects')}
+							onMinimize={() => minimizeWindow('projects')}
+							onMaximize={() => setProjectsMaximized((m) => !m)}
+						/>
+					}
+					toolBar={<ProjectsToolBar onBack={() => setSelectedProject(null)} canGoBack={!!selectedProject} />}
+					addressBar={<AddressBar projectTitle={selectedProject?.id} />}
 					defaultX={250}
 					defaultY={20}
 					defaultWidth={1400}
@@ -210,9 +226,11 @@ export default function Home() {
 					onFocus={() => focusWindow('projects')}
 					onClose={() => closeWindow('projects')}
 					onMinimize={() => minimizeWindow('projects')}
+					isMaximized={projectsMaximized}
+					onMaximize={() => setProjectsMaximized((m) => !m)}
 					animationState={windows.projects.animationState}
 				>
-					<Resume zoomed={resumeZoomed} onZoomToggle={() => setResumeZoomed((z) => !z)} />
+					<ProjectsExplorer selected={selectedProject} onSelect={setSelectedProject} />
 				</Window>
 			)}
 		</main>

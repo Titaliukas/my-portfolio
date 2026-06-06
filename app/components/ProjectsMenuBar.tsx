@@ -16,13 +16,11 @@ type Menu = {
 	items: MenuItem[];
 };
 
-export default function ResumeMenuBar({
-	onSave,
+export default function ProjectsMenuBar({
 	onExit,
 	onMinimize,
 	onMaximize,
 }: {
-	onSave?: () => void;
 	onExit?: () => void;
 	onMinimize?: () => void;
 	onMaximize?: () => void;
@@ -34,8 +32,7 @@ export default function ResumeMenuBar({
 		{
 			label: 'File',
 			items: [
-				{ label: 'Save', onClick: onSave },
-				{ label: 'Print', disabled: true },
+				{ label: 'Save', disabled: true },
 				{ label: 'Exit', onClick: onExit, separator: true },
 			],
 		},
